@@ -1,0 +1,17 @@
+div.anchor {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  padding: $space-sm;
+  border-radius: $border-radius $border-radius 0 0;
+  background-color: $contrast;
+  color: $white;
+  transform: rotate(-90deg);
+  transform: translate(20px, 0) rotate(-90deg);
+  cursor: pointer;
+  transition: all 0.3s;
+
+  &:hover {
+    background-color: $hover-contrast;
+  }
+}

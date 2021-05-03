@@ -1,0 +1,29 @@
+.feedback-form {
+  select,
+  input,
+  textarea {
+    width: 100%;
+    padding: $space-sm;
+    border: 0.5px solid $font-color;
+    border-radius: 0.5rem;
+    font-family: inherit;
+
+    &:focus {
+      outline: none;
+      border-color: $accent;
+      box-shadow: 0 0 3px $accent;
+    }
+  }
+
+  .feedback-form--error {
+    border: 1px solid $error-color;
+  }
+
+  .feedback-form--error-msg {
+    display: inline-block;
+    width: 100%;
+    text-align: start;
+    font-size: 0.75rem;
+    color: $error-color;
+  }
+}
