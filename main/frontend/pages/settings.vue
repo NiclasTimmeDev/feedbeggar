@@ -39,6 +39,24 @@
           </v-btn>
         </v-col>
       </v-row>
+
+      <v-row>
+        <v-col cols="12">
+          <v-btn
+              :loading="logout.loading"
+              class="ma-2 white--text"
+              color="error"
+              @click="submitLogout"
+          >
+            Logout
+            <v-icon
+                right
+            >
+              mdi-logout
+            </v-icon>
+          </v-btn>
+        </v-col>
+      </v-row>
     </form>
 
     <v-snackbar
@@ -83,6 +101,9 @@ export default {
           text: ""
         },
       },
+      logout: {
+        loading: false
+      }
     }
   },
   /**
@@ -117,17 +138,17 @@ export default {
         });
 
         // Success.
-        if(res.status === 200) {
+        if (res.status === 200) {
           this.profile.meta = {
             ...this.profile.meta,
             loading: false,
             error: ""
           };
           this.profile.snackbar = {
-              ...this.profile.snackbar,
-              show: true,
-              error: false,
-              text: "Profile edited successfully"
+            ...this.profile.snackbar,
+            show: true,
+            error: false,
+            text: "Profile edited successfully"
           }
         }
       } catch (e) {
@@ -142,6 +163,19 @@ export default {
           error: true,
           text: "Something went wrong. Please try again later."
         }
+      }
+    },
+    /**
+     * Log the user out.
+     */
+    async submitLogout() {
+      try {
+        const res = await this.$axios.post("/logout");
+        if (res.status === 204) {
+          window.location.reload();
+        }
+      } catch (error) {
+        console.log(error);
       }
     }
   },
