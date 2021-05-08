@@ -65,6 +65,9 @@ Route::post('/projects', [ProjectController::class, 'store']);
 // Update an existing project.
 Route::patch('/projects', [ProjectController::class, 'update']);
 
+// Delete a project.
+Route::delete('/projects/{project_id}', [ProjectController::class, 'destroy']);
+
 /**
  * |--------------------------------------------------------------------------
  * | Buckets related.

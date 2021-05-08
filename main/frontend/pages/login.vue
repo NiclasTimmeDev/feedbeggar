@@ -1,6 +1,6 @@
 <template>
-  <v-row justify="center" align="center">
-    <v-col cols="12" sm="8" md="6">
+  <v-row align="center" justify="center">
+    <v-col cols="12" md="6" sm="8">
       <v-card>
         <!-- Error message -->
         <v-alert v-if="error" type="error">{{ error }}</v-alert>
@@ -13,31 +13,40 @@
           <form @submit.prevent="submit">
             <!-- EMAIL -->
             <v-text-field
-              v-model="email"
-              :error-messages="emailErrors"
-              label="E-mail"
-              @input="$v.email.$touch()"
-              @blur="$v.email.$touch()"
+                v-model="email"
+                :error-messages="emailErrors"
+                label="E-mail"
+                @blur="$v.email.$touch()"
+                @input="$v.email.$touch()"
             ></v-text-field>
 
             <!-- PASSWORD -->
             <v-text-field
-              v-model="password"
-              :error-messages="passwordErrors"
-              type="password"
-              name="input-10-1"
-              label="Password"
-              hint="At least 8 characters"
-              @input="$v.password.$touch()"
-              @blur="$v.password.$touch()"
+                v-model="password"
+                :error-messages="passwordErrors"
+                hint="At least 8 characters"
+                label="Password"
+                name="input-10-1"
+                type="password"
+                @blur="$v.password.$touch()"
+                @input="$v.password.$touch()"
             ></v-text-field>
+
+            <!-- Register and forgot password links.-->
+            <div class="d-flex justify-space-between mb-5">
+              <div class="">Don't have an account?
+                <nuxt-link to="/register">Register</nuxt-link>
+              </div>
+              <nuxt-link to="/forgot-password">Forgot password?</nuxt-link>
+            </div>
+
 
             <!-- SUBMIT BUTTON -->
             <v-btn
-              class="mr-4"
-              color="primary"
-              :loading="loading"
-              type="submit"
+                :loading="loading"
+                class="mr-4"
+                color="primary"
+                type="submit"
             >
               Login
             </v-btn>
@@ -49,21 +58,20 @@
 </template>
 
 <script>
-import { validationMixin } from "vuelidate";
-import {
-  required,
-  maxLength,
-  minLength,
-  email
-} from "vuelidate/lib/validators";
+import {validationMixin} from "vuelidate";
+import {email, minLength, required} from "vuelidate/lib/validators";
+
 export default {
   // Only guests may access this route.
   auth: "guest",
 
+  // Unauthenticated layout.
+  layout: 'guest',
+
   mixins: [validationMixin],
   validations: {
-    email: { required, email },
-    password: { required, minLength: minLength(8) }
+    email: {required, email},
+    password: {required, minLength: minLength(8)}
   },
   data: () => ({
     email: "",
@@ -77,7 +85,7 @@ export default {
       if (!this.$v.password.$dirty) return errors;
       !this.$v.password.required && errors.push("Password is required");
       !this.$v.password.minLength &&
-        errors.push("Password must be at least 8 characters long.");
+      errors.push("Password must be at least 8 characters long.");
       return errors;
     },
     emailErrors() {
@@ -118,9 +126,7 @@ export default {
           }
         });
       } catch (error) {
-        // Display error badge if something went wrong.
-        this.error =
-          error.response.data.message || "Sorry, something was wrong.";
+        console.log(error);
       }
       this.loading = false;
     }

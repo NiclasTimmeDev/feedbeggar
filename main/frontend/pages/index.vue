@@ -10,8 +10,13 @@
   <!--  @TODO: Display proper error.-->
   <p v-else-if="$fetchState.error">An error occurred :(</p>
 
-  <div v-else>
+  <div v-else-if="!currentProject">
+    Please select a project in order to see the corresponding feedback.
+    You can do this
+    <nuxt-link to="/projects">here</nuxt-link>.
+  </div>
 
+  <div v-else>
     <!-- Headline-->
     <v-row>
       <v-col class="d-flex justify-start align-center" cols="12">
@@ -25,6 +30,8 @@
     </v-row>
 
     <!-- Table-->
+
+
     <v-row>
       <v-col cols="12">
         <v-data-table
@@ -35,14 +42,6 @@
             @click:row="routeToSingle"
         >
           <template v-slot:item.type="{ item }">
-
-            <!--Badge for feedback type-->
-<!--            <v-chip-->
-<!--                color="green"-->
-<!--                dark-->
-<!--            >-->
-<!--              {{ item.type }}-->
-<!--            </v-chip>-->
             <type-badge :type="item.type"></type-badge>
           </template>
 

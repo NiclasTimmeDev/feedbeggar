@@ -68,6 +68,10 @@ class ProjectController extends Controller
 
             // Check that the name is given in request.
             $name = $request->name;
+
+            // URL is not required.
+            $url = $request->url ?? "";
+
             if (!$name) {
                 return ExceptionHelper::customSingleError('No name provided', 400);
             }
@@ -82,6 +86,7 @@ class ProjectController extends Controller
             $new_project = new Project([
                 'user_id' => $user->id,
                 'name' => $name,
+                'url' => $url,
                 // Premium project if user is premium.
                 'is_premium' => $user->is_premium
             ]);
@@ -130,7 +135,7 @@ class ProjectController extends Controller
              * If the client tries to update something else
              * throw a corresponding error.
              */
-            $whitelist = ['name'];
+            $whitelist = ['name', 'url'];
             $error = FALSE;
             foreach ($updates as $key => $value) {
                 if (!in_array($key, $whitelist)) {
@@ -177,11 +182,10 @@ class ProjectController extends Controller
                 $new_cache = [];
                 foreach ($cached_data as $existing_project_in_cache) {
                     // If we arrive at the updated data.
-                    if((int) $existing_project_in_cache->id === (int) $project_id) {
+                    if ((int)$existing_project_in_cache->id === (int)$project_id) {
                         $new_cache[] = $project->attributesToArray();
-                    }
-                    // If it's not the updated data, keep the existing data in cache.
-                    else if ((int) $existing_project_in_cache->id !== (int) $project_id) {
+                    } // If it's not the updated data, keep the existing data in cache.
+                    else if ((int)$existing_project_in_cache->id !== (int)$project_id) {
                         $new_cache[] = $existing_project_in_cache;
                     }
                 }
@@ -190,6 +194,44 @@ class ProjectController extends Controller
             }
 
             return $project;
+        } catch (Throwable $e) {
+            return ExceptionHelper::customSingleError('Sorry, something went wrong. Please try again later.', 500);
+        }
+    }
+
+    /**
+     * Delete a project.
+     *
+     * @param string $project_id
+     *   The id of the project that will be deleted.
+     *
+     * @return JsonResponse
+     */
+    public function destroy(string $project_id)
+    {
+        try {
+            if (!$project_id) {
+                return ExceptionHelper::customSingleError('No project id provided.', 400);
+            }
+
+            $user = Auth::user();
+            if (!$user instanceof User) {
+                return ExceptionHelper::customSingleError('Access denied.', 401);
+            }
+
+            // Check if user has access to the project and load it if so.
+            $project = PermissionHelper::checkAccessAndLoadProject($user, $project_id);
+
+            if (!$project) {
+                return ExceptionHelper::customSingleError('Project not found', 404);
+            }
+
+            // Delete all feedback that belongs to this project.
+            $project->feedback()->delete();
+
+            // Delete the project.
+            $project->delete();
+
         } catch (Throwable $e) {
             return ExceptionHelper::customSingleError('Sorry, something went wrong. Please try again later.', 500);
         }

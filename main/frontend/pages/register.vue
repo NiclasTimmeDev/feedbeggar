@@ -1,6 +1,6 @@
 <template>
-  <v-row justify="center" align="center">
-    <v-col cols="12" sm="8" md="6">
+  <v-row align="center" justify="center">
+    <v-col cols="12" md="6" sm="8">
       <v-card>
         <!-- ERROR MESSAGE -->
         <v-alert v-if="error" type="error">{{ error }}</v-alert>
@@ -14,52 +14,65 @@
           <form @submit.prevent="submit">
             <!-- NAME -->
             <v-text-field
-              v-model="name"
-              :error-messages="nameErrors"
-              label="Name"
-              @input="$v.email.$touch()"
-              @blur="$v.email.$touch()"
+                v-model="name"
+                :error-messages="nameErrors"
+                label="Name"
+                @blur="$v.email.$touch()"
+                @input="$v.email.$touch()"
             ></v-text-field>
 
             <!-- EMAIL -->
             <v-text-field
-              v-model="email"
-              :error-messages="emailErrors"
-              label="E-mail"
-              @input="$v.email.$touch()"
-              @blur="$v.email.$touch()"
+                v-model="email"
+                :error-messages="emailErrors"
+                label="E-mail"
+                @blur="$v.email.$touch()"
+                @input="$v.email.$touch()"
             ></v-text-field>
 
             <!-- PASSWORD -->
             <v-text-field
-              v-model="password"
-              :error-messages="passwordErrors"
-              type="password"
-              name="input-10-1"
-              label="Password"
-              hint="At least 8 characters"
-              @input="$v.password.$touch()"
-              @blur="$v.password.$touch()"
+                v-model="password"
+                :error-messages="passwordErrors"
+                hint="At least 8 characters"
+                label="Password"
+                name="input-10-1"
+                type="password"
+                @blur="$v.password.$touch()"
+                @input="$v.password.$touch()"
             ></v-text-field>
 
             <!-- CONFIRM PASSWORD -->
             <v-text-field
-              v-model="passwordConfirmed"
-              :error-messages="passwordConfirmedErrors"
-              type="password"
-              name="input-10-1"
-              label="Repeat Password"
-              hint="Must match the password entered above"
-              @input="$v.passwordConfirmed.$touch()"
-              @blur="$v.passwordConfirmed.$touch()"
+                v-model="passwordConfirmed"
+                :error-messages="passwordConfirmedErrors"
+                hint="Must match the password entered above"
+                label="Repeat Password"
+                name="input-10-1"
+                type="password"
+                @blur="$v.passwordConfirmed.$touch()"
+                @input="$v.passwordConfirmed.$touch()"
             ></v-text-field>
+
+            <p class="text-caption">
+              By clicking on "register" you accept our
+              <nuxt-link to="terms" >Terms & conditions</nuxt-link>
+              and our
+              <nuxt-link to="privacy">privacy policy</nuxt-link>
+              .
+            </p>
+
+
+            <div class="mb-5" >Already have an account?
+              <nuxt-link to="/login">Login</nuxt-link>
+            </div>
 
             <!-- SUBMIT BUTTON -->
             <v-btn
-              class="mr-4"
-              color="primary"
-              type="submit"
-              :loading="loading"
+                :loading="loading"
+                class="mr-4"
+                color="primary"
+                type="submit"
             >
               Register
             </v-btn>
@@ -71,25 +84,21 @@
 </template>
 
 <script>
-import { validationMixin } from "vuelidate";
-import {
-  required,
-  maxLength,
-  minLength,
-  email,
-  sameAs
-} from "vuelidate/lib/validators";
+import {validationMixin} from "vuelidate";
+import {email, minLength, required, sameAs} from "vuelidate/lib/validators";
 
 export default {
   // Only guests may access this route.
   auth: "guest",
 
+  layout: 'guest',
+
   mixins: [validationMixin],
   validations: {
-    name: { required },
-    email: { required, email },
-    password: { required, minLength: minLength(8) },
-    passwordConfirmed: { sameAs: sameAs("password") }
+    name: {required},
+    email: {required, email},
+    password: {required, minLength: minLength(8)},
+    passwordConfirmed: {sameAs: sameAs("password")}
   },
   data: () => ({
     name: "",
@@ -118,14 +127,14 @@ export default {
       if (!this.$v.password.$dirty) return errors;
       !this.$v.password.required && errors.push("Password is required");
       !this.$v.password.minLength &&
-        errors.push("Password must be at least 8 characters long.");
+      errors.push("Password must be at least 8 characters long.");
       return errors;
     },
     passwordConfirmedErrors() {
       const errors = [];
       if (!this.$v.passwordConfirmed.$dirty) return errors;
       !this.$v.passwordConfirmed.sameAs &&
-        errors.push("Passwords must be equal");
+      errors.push("Passwords must be equal");
       return errors;
     }
   },
@@ -154,11 +163,11 @@ export default {
         });
 
         if (res.status === 201) {
-          this.$router.push("/");
+          window.location.reload();
         }
       } catch (error) {
         this.error =
-          error.response.data.message || "Sorry, something was wrong.";
+            error.response.data.message || "Sorry, something was wrong.";
       }
 
       this.loading = false;

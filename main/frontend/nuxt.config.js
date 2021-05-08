@@ -1,9 +1,20 @@
 import colors from "vuetify/es5/util/colors";
 
 export default {
+
+  // Server configuration,
   server: {
     host: '0' // default: localhost
   },
+
+  // Environment variables.
+  env: {
+    backendURL: process.env.BACKEND_URL,
+    widgetURL: process.env.WIDGET_URL,
+    marketingHomeURL: process.env.MARKETING_HOME_URL,
+    version: process.env.VERSION
+  },
+
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     titleTemplate: "%s - frontend",
@@ -45,7 +56,7 @@ export default {
   // Axios.
   axios: {
     credentials: true,
-    baseURL: "http://localhost:8000",
+    baseURL: process.env.BACKEND_URL,
   },
 
   // Protect routes from being accessed by unauthenticated users.
@@ -53,11 +64,12 @@ export default {
     middleware: ["auth"]
   },
 
+  // Authentication strategies.
   auth: {
     strategies: {
       laravelSanctum: {
         provider: "laravel/sanctum",
-        url: "http://localhost:8000",
+        url: process.env.BACKEND_URL,
         endpoints: {
           login: {
             url: "/login"

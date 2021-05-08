@@ -29,7 +29,8 @@ class FeedbackPostController extends Controller
     {
         try {
             // Check current user.
-                $user = Auth::user();
+            $user = Auth::user();
+
             if (!$user) {
                 return ExceptionHelper::customSingleError('Not authenticated', 403);
             }
@@ -41,10 +42,10 @@ class FeedbackPostController extends Controller
             }
 
             // Try to get feedback from cache.
-            $feedback = Redis::get('project_feedback_' . $project_id);
-            if ($feedback) {
-                return $feedback;
-            }
+//            $feedback = Redis::get('project_feedback_' . $project_id);
+//            if ($feedback) {
+//                return $feedback;
+//            }
 
             // Load and return feedback for the project.
             $feedback = FeedbackPost::where('project_id', $project_id)->orderBy('created_at', 'DESC')->get();
