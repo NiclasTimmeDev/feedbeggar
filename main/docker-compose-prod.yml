@@ -1,37 +1,24 @@
 version: "3"
 
 services:
-  backend:
+  app:
     build:
-      context: ./VM
+      context: ./
       dockerfile: Dockerfile.prod
-    container_name: backend
+    container_name: app
     ports:
       - "8000:8000"
-      - "9000:9000"
+      - "3000:3000"
     volumes:
       - ".:/var/www/html"
     restart: unless-stopped
     networks:
       - app
     environment:
-      XDEBUG_CONFIG: "client_host=host.docker.internal"
+      HOST: "0.0.0.0"
     depends_on:
       - mysql
       - redis
-
-  frontend:
-    image: node:alpine
-    working_dir: /var/www/html
-    container_name: frontend
-    volumes:
-      - "./client:/var/www/html"
-    command: sh -c "npm install && npm run build && npm start"
-    restart: unless-stopped
-    ports:
-      - "3000:3000"
-    networks:
-      - app
 
   server:
     image: nginx:alpine
@@ -46,8 +33,7 @@ services:
     networks:
       - app
     depends_on:
-      - backend
-      - frontend
+      - app
 
   mysql:
     image: "mysql:8.0"

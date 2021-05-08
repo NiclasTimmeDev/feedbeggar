@@ -44,7 +44,7 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-    <LayoutFooter></LayoutFooter>
+<!--    <LayoutFooter></LayoutFooter>-->
   </v-app>
 </template>
 
