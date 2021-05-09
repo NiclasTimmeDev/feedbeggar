@@ -47,7 +47,7 @@ class MailResetPasswordMail extends Notification
          * as we use an SPA and different URL on the frontend. We use the sanctum
          * stateful domain as the base url, because this is the base url of our frontend.
          */
-        $action_url = env('FRONTEND_URL') . '/user/password/reset/' . $this->token;
+        $action_url = env('FRONTEND_URL') . '/user/resetpassword/' . $this->token;
         return (new MailMessage)
             ->line('The introduction to the notification.')
             ->action('Reset password', $action_url)
