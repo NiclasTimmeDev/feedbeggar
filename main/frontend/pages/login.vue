@@ -37,7 +37,7 @@
               <div class="">Don't have an account?
                 <nuxt-link to="/register">Register</nuxt-link>
               </div>
-              <nuxt-link to="/forgot-password">Forgot password?</nuxt-link>
+              <nuxt-link to="/forgotpassword">Forgot password?</nuxt-link>
             </div>
 
 
