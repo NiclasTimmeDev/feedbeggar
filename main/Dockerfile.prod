@@ -45,6 +45,7 @@ COPY ./VM/www.conf /etc/php/8.0/fpm/pool.d/
 
 # Install npm dependencies.
 RUN npm i --prefix /var/www/html/frontend
+RUN npm run build --prefix /var/www/html/frontend
 
 # Add admin user
 RUN useradd -ms /bin/bash -u 1337 admin

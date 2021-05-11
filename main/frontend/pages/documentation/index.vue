@@ -28,10 +28,6 @@
   </div>
 </template>
 
-<h3>How many buckets can I create?</h3>
-<p>You can create as many buckets as you want. However, you can assign one feedback to one bucket only.</p>
-
-
 <script>
 export default {
   data() {
