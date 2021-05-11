@@ -319,8 +319,9 @@ export default {
       this.updateBucket.loading = true;
 
       try {
+        await this.$axios.get("/sanctum/csrf-cookie");
         const res = await this.$axios.patch(`/api/buckets/`, {
-          bucket_id: this.bucket.id,
+          bucket_id: this.bucketID,
           updates: {
             name: this.updateBucket.data.name,
             description: this.updateBucket.data.description
