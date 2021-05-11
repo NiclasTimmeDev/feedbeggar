@@ -38,6 +38,7 @@ RUN apt update && apt-get update && apt-get install php8.0-fpm -y
 RUN composer update
 
 COPY ./VM/supervisor.conf /etc/supervisor/conf.d/supervisord.conf
+COPY ./VM/www.conf /etc/php/8.0/fpm/pool.d/
 
 # Start php server.
 #RUN service php8.0-fpm start
