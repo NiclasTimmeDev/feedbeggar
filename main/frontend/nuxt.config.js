@@ -17,8 +17,8 @@ export default {
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    titleTemplate: "%s - frontend",
-    title: "frontend",
+    titleTemplate: "%s - Feedbeggar",
+    title: "Feedbeggar",
 
     htmlAttrs: {
       lang: "en"
