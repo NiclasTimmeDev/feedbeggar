@@ -45,6 +45,8 @@ services:
       - ./certbot/conf:/etc/letsencrypt
       - ./certbot/logs:/var/log/letsencrypt
       - ./certbot/data:/var/www/certbot
+    depends_on:
+      - nginx_server
 
   mysql:
     image: "mysql:8.0"
