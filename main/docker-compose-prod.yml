@@ -38,15 +38,15 @@ services:
     depends_on:
       - app
 
-  certbot:
-    image: certbot/certbot:latest
-    command: certonly --webroot --webroot-path=/var/www/certbot --email info@feedbeggar.com --agree-tos --no-eff-email -d app.feedbeggar.com -d www.app.feedbeggar.com -d api.feedbeggar.com -d www.api.feedbeggar.com
-    volumes:
-      - ./certbot/conf:/etc/letsencrypt
-      - ./certbot/logs:/var/log/letsencrypt
-      - ./certbot/data:/var/www/certbot
-    depends_on:
-      - nginx_server
+#  certbot:
+#    image: certbot/certbot:latest
+#    command: certonly --webroot --webroot-path=/var/www/certbot --email info@feedbeggar.com --agree-tos --no-eff-email -d app.feedbeggar.com -d www.app.feedbeggar.com -d api.feedbeggar.com -d www.api.feedbeggar.com
+#    volumes:
+#      - ./certbot/conf:/etc/letsencrypt
+#      - ./certbot/logs:/var/log/letsencrypt
+#      - ./certbot/data:/var/www/certbot
+#    depends_on:
+#      - nginx_server
 
   mysql:
     image: "mysql:8.0"
