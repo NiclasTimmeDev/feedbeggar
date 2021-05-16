@@ -2,7 +2,7 @@ FROM ubuntu:20.04
 
 COPY ./ /var/www/html
 
-WORKDIR /var/www/html/backend
+WORKDIR /var/www/html/main/backend
 
 ENV DEBIAN_FRONTEND noninteractive
 ENV TZ=UTC
@@ -44,8 +44,8 @@ COPY ./VM/www.conf /etc/php/8.0/fpm/pool.d/
 #RUN service php8.0-fpm start
 
 # Install npm dependencies.
-RUN npm i --prefix /var/www/html/frontend
-RUN npm run build --prefix /var/www/html/frontend
+RUN npm i --prefix /var/www/html/main/frontend
+RUN npm run build --prefix /var/www/html/main/frontend
 
 # Add admin user
 RUN useradd -ms /bin/bash -u 1337 admin
