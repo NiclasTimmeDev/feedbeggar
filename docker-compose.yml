@@ -9,7 +9,7 @@ services:
       - "8000:8000"
       - "3000:3000"
     volumes:
-      - ".:/var/www/html"
+      - "./main:/var/www/html"
     restart: unless-stopped
     networks:
       - app
