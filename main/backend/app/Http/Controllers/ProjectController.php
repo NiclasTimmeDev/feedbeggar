@@ -9,7 +9,6 @@ use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redis;
 use Throwable;
 
 class ProjectController extends Controller
@@ -37,17 +36,8 @@ class ProjectController extends Controller
                 return ExceptionHelper::customSingleError('You are not logged in.', 401);
             }
 
-            // Try get cached values.
-//            $cached_data = Redis::get('projects_by_user_' . $user_id);
-//            if ($cached_data) {
-//                return $cached_data;
-//            }
-
             // Get all projects.
             $projects = Project::where('user_id', $user_id)->get()->values()->all();
-
-            // Cache the results.
-            Redis::set('projects_by_user_' . $user_id, json_encode($projects));
 
             return $projects;
         } catch (Throwable $e) {
@@ -93,13 +83,6 @@ class ProjectController extends Controller
 
             $new_project->save();
 
-            // Update the caches if we already have them stored.
-            $cached_data = json_decode(Redis::get('projects_by_user_' . $user->id));
-
-            if (is_array($cached_data)) {
-                $cached_data[] = $new_project->attributesToArray();
-                Redis::set('projects_by_user_' . $user->id, json_encode($cached_data));
-            }
 
             return $new_project;
         } catch (Throwable $e) {
@@ -167,31 +150,6 @@ class ProjectController extends Controller
              * is save to write it this way.
              */
             $project->update($updates);
-
-            /*
-             * Check if the list of projects is already cached.
-             * If so, update it.
-             */
-            $cached_data = json_decode(Redis::get('projects_by_user_' . $user->id));
-            if ($cached_data) {
-                /*
-                 * We need to iterate over all existing cached
-                 * data and check if the one we updated is in there.
-                 * If so, we need to swap it with the updated value.
-                 */
-                $new_cache = [];
-                foreach ($cached_data as $existing_project_in_cache) {
-                    // If we arrive at the updated data.
-                    if ((int)$existing_project_in_cache->id === (int)$project_id) {
-                        $new_cache[] = $project->attributesToArray();
-                    } // If it's not the updated data, keep the existing data in cache.
-                    else if ((int)$existing_project_in_cache->id !== (int)$project_id) {
-                        $new_cache[] = $existing_project_in_cache;
-                    }
-                }
-                // Update the cached data.
-                Redis::set('projects_by_user_' . $user->id, json_encode($new_cache));
-            }
 
             return $project;
         } catch (Throwable $e) {

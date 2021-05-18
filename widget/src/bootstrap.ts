@@ -24,5 +24,11 @@ domManipulator.createDomElement({
   classes: "anchor"
 });
 
+// Make body overflow hidden so we can have the transition animation when opening the widget.
+const body = document.querySelector("body");
+if(body) {
+  body.style.overflow = "hidden"
+}
+
 // Create the form element.
 const feedbackForm = new FeedbackForm(projectID);

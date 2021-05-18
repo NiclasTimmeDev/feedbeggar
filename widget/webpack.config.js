@@ -45,13 +45,13 @@ module.exports = (env, argv) => {
       new webpack.DefinePlugin({
         // Define the api host url for development and production.
         'process.env.API_HOST': isDevelopment()
-          ? JSON.stringify('http://localhost:8001/')
-          : JSON.stringify('production'),
+          ? JSON.stringify(process.env.API_URL_DEV)
+          : JSON.stringify(process.env.API_URL_PROD),
       }),
     ],
     output: {
       publicPath: '/dist',
-      filename: 'bundle.js',
+      filename: 'feedbeggar-widget.js',
       path: path.resolve(__dirname, 'dist'), // Output the compiled file to the dist directory.
     },
   };

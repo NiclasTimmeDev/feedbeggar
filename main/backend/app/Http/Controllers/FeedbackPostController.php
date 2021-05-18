@@ -12,7 +12,6 @@ use App\Notifications\FeedbackSubmitted;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Storage;
 use Throwable;
 
@@ -41,16 +40,8 @@ class FeedbackPostController extends Controller
                 return ExceptionHelper::customSingleError('Project not found', 404);
             }
 
-            // Try to get feedback from cache.
-//            $feedback = Redis::get('project_feedback_' . $project_id);
-//            if ($feedback) {
-//                return $feedback;
-//            }
-
             // Load and return feedback for the project.
             $feedback = FeedbackPost::where('project_id', $project_id)->orderBy('created_at', 'DESC')->get();
-
-            Redis::set('project_feedback_' . $project_id, json_encode($feedback->all()));
 
             return $feedback;
         } catch (Throwable $e) {
@@ -121,17 +112,9 @@ class FeedbackPostController extends Controller
                 return ExceptionHelper::customSingleError('You do not have access to this bucket.', 401);
             }
 
-            // Try to get data from cache.
-            $feedback = Redis::get('feedback_by_bucket_' . $bucket_id);
-            if ($feedback) {
-                return $feedback;
-            }
 
             // If no cache available, get data from database.
             $feedback = FeedbackPost::where('bucket_id', $bucket_id)->orderBy('updated_at', 'DESC')->get();
-
-            // Cache the data.
-            Redis::set('feedback_by_bucket_' . $bucket_id, json_encode($feedback->all()));
 
             return $feedback;
         } catch (Throwable $e) {
@@ -198,25 +181,7 @@ class FeedbackPostController extends Controller
             // Update the feedback.
             $feedback->update(['bucket_id' => $bucket_id]);
 
-            // Update the caches of the old bucket if it exists.
-            $old_bucket = json_decode(Redis::get('feedback_by_bucket_' . $current_bucket));
-            if ($old_bucket) {
-                $new_bucket = [];
-                foreach ($old_bucket as $old_bucket_feedback) {
-                    if((int)$feedback->bucket_id === (int) $current_bucket) {
-                        $new_bucket[] = $old_bucket_feedback;
-                    }
-                }
-
-                Redis::set('feedback_by_bucket_' . $current_bucket, json_encode($new_bucket));
-            }
-
-            // Update the caches of the new bucket if they exist.
-            $cached_data = json_decode(Redis::get('feedback_by_bucket_' . $bucket_id));
-            if(is_array($cached_data)) {
-                $cached_data[] = $feedback;
-                Redis::set('feedback_by_bucket_' . $bucket_id, json_encode($cached_data));
-            }
+            return $feedback;
 
         } catch (Throwable $e) {
             return ExceptionHelper::customSingleError('Sorry, something went wrong. Please try again later.', 500);
@@ -316,9 +281,6 @@ class FeedbackPostController extends Controller
 
             // Notify owner of project about the new feedback.
             $this->notifyUser($project, $new_feedback);
-
-            // Delete the cache.
-            Redis::del('project_feedback_' . $project_id);
 
             // Send positive response to client.
             return true;
@@ -459,13 +421,6 @@ class FeedbackPostController extends Controller
             if ((int)$feedback->project_id !== (int)$project->id) {
                 return ExceptionHelper::customSingleError('You do not have access to this resource.', 403);
             }
-
-            // Delete caches.
-            if($feedback->bucket_id) {
-                Redis::del('feedback_by_bucket_' . $feedback->bucket_id);
-            }
-
-            Redis::del('project_feedback_' . $project_id);
 
             // Delete the bucket.
             $feedback->delete();

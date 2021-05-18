@@ -9,7 +9,6 @@ use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redis;
 use Throwable;
 
 class BucketController extends Controller
@@ -46,17 +45,10 @@ class BucketController extends Controller
                 return ExceptionHelper::customSingleError('Project not found', 404);
             }
 
-            // Try to get the data from cache.
-//            $cached_buckets = Redis::get('buckets_by_project_' . $project_id);
-//            if ($cached_buckets) {
-//                return $cached_buckets;
-//            }
 
             // Send the buckets.
             $buckets = Bucket::where('project_id', $project_id)->orderBy('updated_at', 'DESC')->get()->values()->all();
 
-            // Cache the result.
-            Redis::set('buckets_by_project_' . $project_id, json_encode($buckets));
 
             return response()->json($buckets);
         } catch (Throwable $e) {
@@ -212,10 +204,6 @@ class BucketController extends Controller
              */
             $bucket->update($updates);
 
-            // Flush cache.
-            //@TODO: Update cache instead of removing it.
-            Redis::del('buckets_by_project_' . $project->id);
-
             return response()->json($bucket);
         } catch (Throwable $e) {
             return ExceptionHelper::customSingleError('Sorry, something went wrong. Please try again later.', 500);
@@ -269,9 +257,6 @@ class BucketController extends Controller
 
             // Delete the bucket.
             $bucket->delete();
-
-            // Flush cache.
-            Redis::del('buckets_by_project_' . $project->id);
 
             return response()->json(true);
         } catch (Throwable $e) {

@@ -68,7 +68,7 @@ export class FeedbackForm {
     const wrapper = this.domManipulator.createDomElement({
       elementType: 'div',
       parent: document.querySelector('body'),
-      classes: 'feedback-form feedback-form--wrapper feedback-form--hidden',
+      classes: 'feedback-form feedback-form--wrapper feedbeggar--feedback-form-hidden',
     });
 
     /**
@@ -129,12 +129,18 @@ export class FeedbackForm {
       this.formErrors.text = '';
     });
 
+    // Wrapper for screenshot attachment element.
+    const screenshotWrapper = document.createElement('div');
+    screenshotWrapper.className ='feedbeggar-screenshot-form-wrapper';
+
+    feedbackForm.appendChild(screenshotWrapper);
+
     // Create checkbox for screenshot.
     const checkbox = this.createInputElement({
       type: 'checkbox',
       name: 'screenshot-checkbox',
       placeholder: 'Screenshot Checkbox',
-      parent: feedbackForm,
+      parent: screenshotWrapper,
       classes: 'feedback-form--checkbox',
     });
     checkbox.id = 'feedback-form--checkbox';
@@ -143,7 +149,7 @@ export class FeedbackForm {
     checkBoxLabel.htmlFor = 'feedback-form--checkbox';
     checkBoxLabel.innerHTML = 'Attach screenshot';
     checkBoxLabel.className = 'feedback-form--checkbox-label';
-    feedbackForm.appendChild(checkBoxLabel);
+    screenshotWrapper.appendChild(checkBoxLabel);
 
     // Toggle paint functionality of checkbox on click.
     this.attachPaintFunctionality(checkbox);
