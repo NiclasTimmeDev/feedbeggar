@@ -455,6 +455,16 @@ export default {
         data: false
       }
     }
+  },
+  /**
+   * ==============================
+   * Fetch hook
+   * ==============================
+   */
+  head(){
+    return {
+      title: 'Bucket'
+    }
   }
 }
 </script>

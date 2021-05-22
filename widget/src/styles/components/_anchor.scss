@@ -1,16 +1,35 @@
-div.anchor {
-  position: absolute;
+div.feedbeggar--anchor {
+  position: fixed;
   top: 50%;
   right: 0;
   padding: $space-sm;
   border-radius: $border-radius $border-radius 0 0;
   background-color: $contrast;
   color: $white;
-  transform: translate(20px, 0) rotate(-90deg);
+  transform: translate(20px, 20px) rotate(-90deg);
   cursor: pointer;
-  transition: all 0.3s;
+  transition: all .3s ease-in-out;
+  z-index: 2000;
 
   &:hover {
     background-color: $hover-contrast;
+  }
+
+  &.feedbeggar-anchor-shift-left {
+    background-color: #fff;
+    color: $contrast;
+    transition: all .3s ease-in-out;
+
+    @media (min-width: 576px) {
+      right: 58%;
+    }
+
+    @media (min-width: 767px) {
+      right: 48%;
+    }
+
+    @media (min-width: 996px) {
+      right: 447px;
+    }
   }
 }

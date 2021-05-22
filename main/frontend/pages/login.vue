@@ -118,7 +118,6 @@ export default {
 
       // Try login.
       try {
-        await this.$axios.get("/sanctum/csrf-cookie");
         const res = await this.$auth.loginWith("laravelSanctum", {
           data: {
             email: this.email,
@@ -126,9 +125,29 @@ export default {
           }
         });
       } catch (error) {
-        console.log(error);
+        const resCode = error.response.status;
+
+        // Wrong credentials.
+        if(resCode === 422) {
+          this.error = "The given credentials are invalid."
+        }
+
+        // Server error.
+        else {
+          this.error = "Sorry, something went wrong."
+        }
       }
       this.loading = false;
+    }
+  },
+  /**
+   * ==============================
+   * Fetch hook
+   * ==============================
+   */
+  head(){
+    return {
+      title: 'Login'
     }
   }
 };

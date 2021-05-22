@@ -56,14 +56,14 @@
 
             <p class="text-caption">
               By clicking on "register" you accept our
-              <nuxt-link to="terms" >Terms & conditions</nuxt-link>
+              <nuxt-link to="terms">Terms & conditions</nuxt-link>
               and our
               <nuxt-link to="privacy">privacy policy</nuxt-link>
               .
             </p>
 
 
-            <div class="mb-5" >Already have an account?
+            <div class="mb-5">Already have an account?
               <nuxt-link to="/login">Login</nuxt-link>
             </div>
 
@@ -100,6 +100,11 @@ export default {
     password: {required, minLength: minLength(8)},
     passwordConfirmed: {sameAs: sameAs("password")}
   },
+  /**
+   * ==============================
+   * DATA
+   * ==============================
+   */
   data: () => ({
     name: "",
     email: "",
@@ -108,6 +113,11 @@ export default {
     loading: false,
     error: ""
   }),
+  /**
+   * ==============================
+   * COMPUTED
+   * ==============================
+   */
   computed: {
     nameErrors() {
       const errors = [];
@@ -138,6 +148,11 @@ export default {
       return errors;
     }
   },
+  /**
+   * ==============================
+   * METHODS
+   * ==============================
+   */
   methods: {
     async submit() {
       // Validate and exit if we have errors.
@@ -162,15 +177,40 @@ export default {
           password_confirmed: this.passwordConfirmed
         });
 
+        this.loading = false;
         if (res.status === 201) {
           window.location.reload();
         }
       } catch (error) {
-        this.error =
-            error.response.data.message || "Sorry, something was wrong.";
-      }
+        this.loading = false;
+        const res = error.response;
 
-      this.loading = false;
+        if (res.status === 500) {
+          return this.error = "Sorry, something went wrong. Please try again later."
+        }
+
+        if(res.status === 422) {
+          const errors = res.data.errors;
+
+          if(errors.email) {
+            return this.error = errors.email[0];
+          }
+
+          if(errors.password) {
+            return this.error = errors.password[0];
+          }
+        }
+      }
+    }
+  },
+  /**
+   * ==============================
+   * Fetch hook
+   * ==============================
+   */
+  head(){
+    return {
+      title: 'Register'
     }
   }
 };

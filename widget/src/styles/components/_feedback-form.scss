@@ -1,9 +1,7 @@
 .feedback-form.feedback-form--wrapper {
   box-sizing: border-box;
-  position: absolute;
-  right: 0;
+  position: fixed;
   bottom: 0;
-  width: 100%;
   height: 50%;
   background-color: $white;
   display: flex;
@@ -46,6 +44,21 @@
 }
 
 .feedbeggar--feedback-form-hidden {
-  right: -100% !important;
+  @media (min-width: 576px) {
+    right: -60%;
+  }
+
+  @media (min-width: 767px) {
+    right: -50%;
+  }
+
+  @media (min-width: 996px) {
+    right: -450px;
+  }
+  transition: right .3s ease-in-out;
+}
+
+.feedbeggar--feedback-form-shown {
+  right: 0 !important;
   transition: right .3s ease-in-out;
 }

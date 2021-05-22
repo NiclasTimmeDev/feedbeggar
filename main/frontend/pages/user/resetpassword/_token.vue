@@ -206,7 +206,16 @@ export default {
       return errors;
     }
   },
-
+  /**
+   * ==============================
+   * Fetch hook
+   * ==============================
+   */
+  head(){
+    return {
+      title: 'Reset password'
+    }
+  }
 
 
 }

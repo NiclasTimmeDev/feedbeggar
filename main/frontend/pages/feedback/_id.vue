@@ -325,6 +325,16 @@ export default {
       this.error = "Sorry, something went wrong. Please try again later."
       return this.feedback = false;
     }
+  },
+  /**
+   * ==============================
+   * Fetch hook
+   * ==============================
+   */
+  head(){
+    return {
+      title: 'Feedback'
+    }
   }
 }
 

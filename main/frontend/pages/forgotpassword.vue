@@ -149,6 +149,16 @@ export default {
       this.loading = false;
 
     }
+  },
+  /**
+   * ==============================
+   * Fetch hook
+   * ==============================
+   */
+  head(){
+    return {
+      title: 'Forgot your password?'
+    }
   }
 }
 </script>

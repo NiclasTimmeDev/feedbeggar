@@ -192,5 +192,15 @@ export default {
       return errors;
     },
   },
+  /**
+   * ==============================
+   * Head hook
+   * ==============================
+   */
+  head(){
+    return {
+      title: 'Settings'
+    }
+  }
 }
 </script>

@@ -15,3 +15,5 @@ yarn-error.log
 /.idea
 /.vscode
 /certbot
+widget/dist/index.html
+widget/dist/feedbeggar-widget.js.LICENSE.txt

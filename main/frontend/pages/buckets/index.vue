@@ -297,6 +297,16 @@ export default {
       this.buckets.loading = false;
       return this.error = "Sorry, something went wrong. Please try again later."
     }
+  },
+  /**
+   * ==============================
+   * Fetch hook
+   * ==============================
+   */
+  head(){
+    return {
+      title: 'Buckets'
+    }
   }
 }
 </script>

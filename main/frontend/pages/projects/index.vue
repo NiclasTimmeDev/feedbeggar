@@ -603,5 +603,15 @@ export default {
       this.projects = false
     }
   },
+  /**
+   * ==============================
+   * Fetch hook
+   * ==============================
+   */
+  head(){
+    return {
+      title: 'Projects'
+    }
+  }
 };
 </script>

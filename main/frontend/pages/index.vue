@@ -198,6 +198,16 @@ export default {
       this.items = false;
       this.itemsError = "Sorry, something went wrong. Please try again later."
     }
+  },
+  /**
+   * ==============================
+   * Fetch hook
+   * ==============================
+   */
+  head(){
+    return {
+      title: 'Dashboard'
+    }
   }
 };
 </script>

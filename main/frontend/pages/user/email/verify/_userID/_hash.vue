@@ -106,8 +106,16 @@
             success: false
           }
         }
+      },
+      /**
+       * ==============================
+       * Fetch hook
+       * ==============================
+       */
+      head(){
+        return {
+          title: 'Verify Password'
+        }
       }
-
-
     }
   </script>
