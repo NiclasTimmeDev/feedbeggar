@@ -150,7 +150,7 @@ class FeedbackPostController extends Controller
              */
             $current_bucket = $feedback->bucket_id ?? null;
 
-            if((int) $current_bucket === (int) $bucket_id) {
+            if ((int)$current_bucket === (int)$bucket_id) {
                 return ExceptionHelper::customSingleError('Nothing to update.', 400);
             }
 
@@ -262,7 +262,7 @@ class FeedbackPostController extends Controller
 
             // Check if the project has a url given. If so, only allow requests from that url.
             $url = $project->url;
-            if ($url && $url !== $request->server('HTTP_REFERER')) {
+            if ($url && str_contains($request->server('HTTP_REFERER'), $url)) {
                 return ExceptionHelper::customSingleError('Posting feedback is not allowed from this URL.', 401);
             }
 
