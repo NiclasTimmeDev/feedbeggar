@@ -4,6 +4,7 @@ use App\Http\Controllers\BucketController;
 use App\Http\Controllers\FeedbackPostController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\SubscriptionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -94,3 +95,10 @@ Route::patch('/buckets', [BucketController::class, 'update']);
  * |--------------------------------------------------------------------------
  */
 Route::patch('/profile', [ProfileController::class, 'update']);
+
+/**
+ * |--------------------------------------------------------------------------
+ * | Profile related.
+ * |--------------------------------------------------------------------------
+ */
+Route::post('/subscription/intent', [SubscriptionController::class, 'subscriptionIntention']);

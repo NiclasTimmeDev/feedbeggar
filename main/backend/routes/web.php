@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\SubscriptionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,3 +20,12 @@ use App\Http\Controllers\Auth\RegisterController;
 // });
 
 Auth::routes(['verify' => true]);
+
+Route::get('subscription-success', function () {
+    SubscriptionController::makeUserPremium();
+    return redirect(env('FRONTEND_URL', 'https://app.feedbeggar.com/'));
+})->name('subscription-success');
+
+Route::get('subscription-error', function () {
+    return redirect(env('FRONTEND_URL', 'https://app.feedbeggar.com/settings?subscription=false'));
+})->name('subscription-error');

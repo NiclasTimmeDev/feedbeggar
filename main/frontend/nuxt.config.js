@@ -12,7 +12,11 @@ export default {
     backendURL: process.env.BACKEND_URL,
     widgetURL: process.env.WIDGET_URL,
     marketingHomeURL: process.env.MARKETING_HOME_URL,
-    version: process.env.VERSION
+    version: process.env.VERSION,
+    stripeKey: process.env.STRIPE_KEY,
+    stripeCheckoutSuccess: process.env.STRIPE_CHECKOUT_SUCCESS_URL,
+    stripeCheckoutError: process.env.STRIPE_CHECKOUT_ERROR_URL,
+    stripeProductID: process.env.STRIPE_PRODUCT_ID
   },
 
   // Global page headers: https://go.nuxtjs.dev/config-head
@@ -50,7 +54,12 @@ export default {
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
-  modules: ["@nuxtjs/axios", "@nuxtjs/auth-next", 'cookie-universal-nuxt',],
+  modules: ["@nuxtjs/axios", "@nuxtjs/auth-next", 'cookie-universal-nuxt',
+    ['nuxt-stripe-module', {
+      publishableKey: process.env.STRIPE_KEY,
+    }],
+
+  ],
 
   // Axios.
   axios: {

@@ -57,6 +57,20 @@
           </v-btn>
         </v-col>
       </v-row>
+
+      <v-row>
+        <v-col cols="12" >
+          <v-btn
+              :loading="profile.meta.loading"
+              color="secondary"
+              text
+              type="submit"
+              @click="checkout"
+          >
+            Upgrade
+          </v-btn>
+        </v-col>
+      </v-row>
     </form>
 
     <v-snackbar
@@ -87,7 +101,16 @@ import {required} from "vuelidate/lib/validators";
 
 export default {
   data() {
+    this.publishableKey = process.env.stripeKey;
     return {
+      lineItems: [
+        {
+          price: 'price_1IuGPLD0vfj8D9RJgiFJXwXf', // The id of the recurring price you created in your Stripe dashboard
+          quantity: 1,
+        },
+      ],
+      successURL: process.env.stripeCheckoutSuccess,
+      cancelURL: process.env.stripeCheckoutError,
       profile: {
         name: this.$auth.user.name,
         meta: {
@@ -119,7 +142,20 @@ export default {
   },
   /**
    * ==============================
-   * Computed.
+   * MOUNTED.
+   * ==============================
+   */
+  mounted() {
+    // if (this.$stripe) {
+    //   const elements = this.$stripe.elements();
+    //   const card = elements.create('card', {});
+    //   // Add an instance of the card Element into the `card-element` <div>
+    //   card.mount('#card-element');
+    // }
+  },
+  /**
+   * ==============================
+   * METHODS.
    * ==============================
    */
   methods: {
@@ -177,6 +213,15 @@ export default {
       } catch (error) {
         console.log(error);
       }
+    },
+    async checkout(){
+      const res = await this.$axios.post('/api/subscription/intent');
+
+      console.log(res.data.session.id);
+        // You will be redirected to Stripe's secure checkout page
+        await this.$stripe.redirectToCheckout({
+          sessionId: res.data.session.id,
+        });
     }
   },
   /**
