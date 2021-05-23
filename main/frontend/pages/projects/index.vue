@@ -340,7 +340,7 @@ export default {
           '2. Go to the "Head" Tag, which typically is somewhere at the top of the file.',
           '3. Insert the following string just below the opening Head-Tag:'
         ],
-        codeSnippetPart1: "<script src='http://widget.feedbeggar.com/feedbeggar-widjet.js?id=",
+        codeSnippetPart1: "<script src='https://widget.feedbeggar.com/feedbeggar-widget.js?id=",
         codeSnippetPart2: "' defer><\/script>"
       }
     }
