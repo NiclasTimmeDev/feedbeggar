@@ -30,8 +30,6 @@
     </v-row>
 
     <!-- Table-->
-
-
     <v-row>
       <v-col cols="12">
         <v-data-table
@@ -201,7 +199,7 @@ export default {
   },
   /**
    * ==============================
-   * Fetch hook
+   * Head hook
    * ==============================
    */
   head(){

@@ -119,12 +119,7 @@
           <template v-slot:item.type="{ item }">
 
             <!--Badge for feedback type-->
-            <v-chip
-                color="green"
-                dark
-            >
-              {{ item.type }}
-            </v-chip>
+            <type-badge :type="item.type"></type-badge>
           </template>
 
           <template v-slot:item.created_at="{ item }">
@@ -183,6 +178,7 @@
 import DateService from "../../services/DateService";
 import {validationMixin} from "vuelidate";
 import {required} from "vuelidate/lib/validators";
+import TypeBadge from "../../components/TypeBadge";
 
 export default {
   data() {

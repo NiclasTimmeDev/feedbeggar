@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "webpack-dev-server --mode=development --output-public-path=/dist/",
+    "dev": "webpack-dev-server --mode=development --output-public-path=/dist/ --port 3001",
     "build": "webpack --mode=production",
     "build-css": "postcss src/styles/styles.css -o dist/styles/styles.css"
   },

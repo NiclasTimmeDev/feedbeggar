@@ -7,6 +7,7 @@ import { Helpers } from './../../services/Helpers/Helpers';
 import { ScreenshotHandler } from './../../services/Canvas/ScreenshotHandler';
 import { ClientInfo } from './../../services/Client/ClientInfo';
 import axios from 'axios';
+import {PoweredBy} from "../PoweredBy/PoweredBy";
 /**
  * The class to create the feedback form element.
  */
@@ -156,6 +157,8 @@ export class FeedbackForm {
 
     // Submit button.
     this.createSubmitButton(feedbackForm, 'Submit Feedback');
+
+    this.poweredByLink();
   };
 
   /**
@@ -291,7 +294,6 @@ export class FeedbackForm {
       this.formErrors.option ||
       this.formErrors.text
     ) {
-      console.log('Error')!;
       return false;
     }
 
@@ -379,4 +381,8 @@ export class FeedbackForm {
       }
     });
   };
+
+  public poweredByLink = () => {
+    const poweredBy = new PoweredBy();
+  }
 }

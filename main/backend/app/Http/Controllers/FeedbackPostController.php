@@ -260,11 +260,18 @@ class FeedbackPostController extends Controller
                 return ExceptionHelper::customSingleError('Project not found', 404);
             }
 
+            // Check if the project has a url given. If so, only allow requests from that url.
+            $url = $project->url;
+            if ($url && $url !== $request->server('HTTP_REFERER')) {
+                return ExceptionHelper::customSingleError('Posting feedback is not allowed from this URL.', 401);
+            }
+
             // If given, create S3 image from screenshot.
             $img_url = '';
             if ($screenshot) {
                 $img_url = $this->storeBase64ImgInS3((string)$project_id, $screenshot);
             }
+
             // Store new feedback in DB.
             $new_feedback = new FeedbackPost([
                 'project_id' => $project_id,

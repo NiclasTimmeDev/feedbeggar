@@ -142,6 +142,7 @@
 <script>
 import {validationMixin} from "vuelidate";
 import {required} from "vuelidate/lib/validators";
+import TypeBadge from "../../components/TypeBadge";
 
 export default {
   data() {
@@ -173,6 +174,12 @@ export default {
       }
     }
   },
+  /**
+   * ==============================
+   * Components
+   * ==============================
+   */
+  components: {TypeBadge},
   /**
    * ==============================
    * Validation for new bucket.

@@ -57,18 +57,6 @@
       </v-col>
     </v-row>
 
-    <!--PICTURE-->
-    <v-row v-if="feedback.screenshot">
-      <v-col cols="12">
-        <v-img :lazy-src="feedback.screenshot"
-               :src="feedback.screenshot"
-               alt="Feedback screenshot"
-               contain
-        >
-        </v-img>
-      </v-col>
-    </v-row>
-
     <!--ACTIONS-->
     <v-row>
       <!-- Add to bucket -->
@@ -152,6 +140,21 @@
             </v-btn>
           </template>
         </v-snackbar>
+
+      </v-col>
+    </v-row>
+
+    <!--PICTURE-->
+    <v-row v-if="feedback.screenshot">
+      <v-col cols="12">
+        <a :href="feedback.screenshot" target="_blank">
+          <v-img :lazy-src="feedback.screenshot"
+                 :src="feedback.screenshot"
+                 alt="Feedback screenshot"
+                 contain
+          >
+          </v-img>
+        </a>
 
       </v-col>
     </v-row>
@@ -280,11 +283,11 @@ export default {
           try {
             // Query the api and redirect the user.
             const res = await _this.$axios.delete(`/api/feedback/${_this.currentProject}/${_this.feedback.id}`);
-            if(res.status === 2000) {
+            if (res.status === 2000) {
               _this.$router.push("/");
             }
           } catch (e) {
-           //@todo: display proper error message.
+            //@todo: display proper error message.
           }
         }
       }, this.remove.timeout)
@@ -331,7 +334,7 @@ export default {
    * Fetch hook
    * ==============================
    */
-  head(){
+  head() {
     return {
       title: 'Feedback'
     }
