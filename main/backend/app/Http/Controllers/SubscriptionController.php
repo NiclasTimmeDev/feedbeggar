@@ -102,4 +102,36 @@ class SubscriptionController extends Controller
             return ExceptionHelper::customSingleError('Sorry, something went wrong. Please try again later.', 500);
         }
     }
+
+    /**
+     * Cancel the premium subscription.
+     *
+     * @return JsonResponse
+     */
+    public function cancelPremiumSubscription() {
+        try {
+            $user = Auth::user();
+
+            if (!$user instanceof User) {
+                return ExceptionHelper::customSingleError('You are not logged in.', 401);
+            }
+
+            // User can only be cancelled if he/she has only one project.
+            $projects = $user->projects()->count();
+
+            if($projects > 1) {
+                return ExceptionHelper::customSingleError('You have more than one project. Please delete all except one before cancelling.', 400);
+            }
+
+            $user->subscription('default')->cancel();
+
+            $user->update([
+                'is_premium' => 0
+            ]);
+
+            return response()->json($user);
+        } catch (Throwable $e) {
+            return ExceptionHelper::customSingleError('Sorry, something went wrong. Please try again later.', 500);
+        }
+    }
 }

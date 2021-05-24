@@ -32,6 +32,7 @@
     </v-app-bar>
     <v-main>
       <v-container>
+        <premium-banner></premium-banner>
         <nuxt />
       </v-container>
     </v-main>
@@ -47,13 +48,12 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-<!--    <v-footer :absolute="!fixed" app>-->
-<!--      <span>&copy; {{ new Date().getFullYear() }}</span>-->
-<!--    </v-footer>-->
   </v-app>
 </template>
 
 <script>
+import Banner from "../components/Premium/Banner";
+
 export default {
   data() {
     return {
@@ -92,6 +92,9 @@ export default {
       rightDrawer: false,
       title: "Feedbeggar"
     };
+  },
+  components: {
+    "premium-banner": Banner
   }
 };
 </script>

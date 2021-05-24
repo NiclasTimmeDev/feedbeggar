@@ -23,7 +23,7 @@
           <!--==============================-->
           <!-- Dialog for adding a new project.-->
           <!--==============================-->
-          <template>
+          <template v-if="parseInt($auth.user.is_premium) === 1 || !projects.length">
             <v-dialog
                 v-model="addProject.dialog"
                 max-width="600px"
@@ -469,6 +469,7 @@ export default {
         this.addProject.loading = false;
         this.addProject.dialog = false;
       } catch (e) {
+        const res = e.response;
 
         this.addProject.loading = false;
         this.addProject.dialog = false;
@@ -478,7 +479,7 @@ export default {
           ...this.addProject.snackbar,
           show: true,
           error: true,
-          text: "Something went wrong. Please try again later."
+          text: res.status === 419 ? res.data.error : "Something went wrong. Please try again later."
         };
       }
     },
@@ -556,8 +557,8 @@ export default {
     /**
      * Delete a project.
      */
-    async submitProjectDeletion(){
-      if(!this.updateProject.data.id) {
+    async submitProjectDeletion() {
+      if (!this.updateProject.data.id) {
         //@TODO: Show proper error message.
         return;
       }
@@ -566,7 +567,7 @@ export default {
         const res = await this.$axios.delete(`/api/projects/${this.updateProject.data.id}`);
 
         console.log(res);
-      } catch(e) {
+      } catch (e) {
         console.log(e);
       }
 
@@ -608,7 +609,7 @@ export default {
    * Fetch hook
    * ==============================
    */
-  head(){
+  head() {
     return {
       title: 'Projects'
     }

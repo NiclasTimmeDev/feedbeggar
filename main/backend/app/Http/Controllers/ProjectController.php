@@ -72,6 +72,19 @@ class ProjectController extends Controller
                 return ExceptionHelper::customSingleError('You are not logged in.', 401);
             }
 
+            /*
+             * Only users that have a premium subscription
+             * can have more than one project.
+             */
+            if (!$user->is_premium) {
+                $projects = $user->projects()->count();
+
+                if ($projects >= 1) {
+                    return ExceptionHelper::customSingleError('You are not allowed to create a project. Consider upgrading to a premium subscription in order to create unlimited projects.', 419);
+                }
+            }
+
+
             // Instantiate new project.
             $new_project = new Project([
                 'user_id' => $user->id,

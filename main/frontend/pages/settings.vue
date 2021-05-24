@@ -2,76 +2,111 @@
   <div>
     <v-row>
       <v-col cols="12">
-        <h1>Settings</h1>
+        <h1 class="text-h2 mb-3">Settings</h1>
       </v-col>
     </v-row>
 
-    <!--Profile details-->
-    <v-row>
-      <v-col cols="6">
-        <h2>Profile</h2>
+    <!-- Accordions -->
+    <v-expansion-panels>
+
+      <!-- Profile-->
+      <v-expansion-panel>
+        <v-expansion-panel-header>
+          <h2>
+            Profile
+          </h2>
+        </v-expansion-panel-header>
+        <v-expansion-panel-content>
+          <form @submit.prevent="updateProfile"
+          >
+            <v-row>
+
+              <v-col cols="6">
+                <v-text-field
+                    v-model="profile.name"
+                    :error-messages="nameErrors"
+                    label="Name*"
+                    required
+                    @blur="$v.profile.name.$touch()"
+                ></v-text-field>
+              </v-col>
+
+            </v-row>
+            <v-row>
+              <v-col cols="12">
+                <v-btn
+                    :loading="profile.meta.loading"
+                    color="secondary"
+                    text
+                    type="submit"
+                >
+                  Save
+                </v-btn>
+              </v-col>
+            </v-row>
+          </form>
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+
+      <!-- Subscription-->
+      <v-expansion-panel>
+        <v-expansion-panel-header>
+          <h2>
+            Subscription
+          </h2>
+        </v-expansion-panel-header>
+        <v-expansion-panel-content>
+          <!-- If user is premium-->
+          <div v-if="parseInt($auth.user.is_premium) === 1">
+            <div>Awesome, you have a premium subscription! This means you can create unlimited projects and receive
+              unlimited feedback
+            </div>
+
+            <nuxt-link class="text-decoration-none" to="/subscriptions/cancel" >
+              <v-btn
+                  text
+                  class="mt-5 text-decoration-none"
+              >Cancel subscription
+              </v-btn>
+            </nuxt-link>
+
+          </div>
+
+          <!-- If user is Not premium-->
+          <div v-else>
+            <div>You are currently on the free plan. Consider upgrading to premium to create unlimited projects and
+              receive unlimited feedback
+            </div>
+
+            <nuxt-link class="text-decoration-none" to="/subscriptions/plans" >
+              <v-btn
+                  color="primary"
+                  class="mt-5 text-decoration-none"
+              >Upgrade
+              </v-btn>
+            </nuxt-link>
+          </div>
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+    </v-expansion-panels>
+
+    <v-row class="mt-5">
+      <v-col cols="12">
+        <v-btn
+            :loading="logout.loading"
+            class="ma-2 white--text"
+            color="error"
+            @click="submitLogout"
+        >
+          Logout
+          <v-icon
+              right
+          >
+            mdi-logout
+          </v-icon>
+        </v-btn>
       </v-col>
     </v-row>
-    <form @submit.prevent="updateProfile"
-    >
-      <v-row>
-
-        <v-col cols="6">
-          <v-text-field
-              v-model="profile.name"
-              :error-messages="nameErrors"
-              label="Name*"
-              required
-              @blur="$v.profile.name.$touch()"
-          ></v-text-field>
-        </v-col>
-
-      </v-row>
-      <v-row>
-        <v-col cols="12">
-          <v-btn
-              :loading="profile.meta.loading"
-              color="secondary"
-              text
-              type="submit"
-          >
-            Save
-          </v-btn>
-        </v-col>
-      </v-row>
-
-      <v-row>
-        <v-col cols="12">
-          <v-btn
-              :loading="logout.loading"
-              class="ma-2 white--text"
-              color="error"
-              @click="submitLogout"
-          >
-            Logout
-            <v-icon
-                right
-            >
-              mdi-logout
-            </v-icon>
-          </v-btn>
-        </v-col>
-      </v-row>
-
-      <v-row>
-        <v-col cols="12" >
-          <v-btn
-              :loading="profile.meta.loading"
-              color="secondary"
-              text
-              type="submit"
-              @click="checkout"
-          >
-            Upgrade
-          </v-btn>
-        </v-col>
-      </v-row>
-    </form>
 
     <v-snackbar
         v-model="profile.snackbar.show"
@@ -101,16 +136,7 @@ import {required} from "vuelidate/lib/validators";
 
 export default {
   data() {
-    this.publishableKey = process.env.stripeKey;
     return {
-      lineItems: [
-        {
-          price: 'price_1IuGPLD0vfj8D9RJgiFJXwXf', // The id of the recurring price you created in your Stripe dashboard
-          quantity: 1,
-        },
-      ],
-      successURL: process.env.stripeCheckoutSuccess,
-      cancelURL: process.env.stripeCheckoutError,
       profile: {
         name: this.$auth.user.name,
         meta: {
@@ -139,19 +165,6 @@ export default {
     profile: {
       name: {required},
     }
-  },
-  /**
-   * ==============================
-   * MOUNTED.
-   * ==============================
-   */
-  mounted() {
-    // if (this.$stripe) {
-    //   const elements = this.$stripe.elements();
-    //   const card = elements.create('card', {});
-    //   // Add an instance of the card Element into the `card-element` <div>
-    //   card.mount('#card-element');
-    // }
   },
   /**
    * ==============================
@@ -213,15 +226,6 @@ export default {
       } catch (error) {
         console.log(error);
       }
-    },
-    async checkout(){
-      const res = await this.$axios.post('/api/subscription/intent');
-
-      console.log(res.data.session.id);
-        // You will be redirected to Stripe's secure checkout page
-        await this.$stripe.redirectToCheckout({
-          sessionId: res.data.session.id,
-        });
     }
   },
   /**
@@ -242,7 +246,7 @@ export default {
    * Head hook
    * ==============================
    */
-  head(){
+  head() {
     return {
       title: 'Settings'
     }

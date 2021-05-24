@@ -102,3 +102,4 @@ Route::patch('/profile', [ProfileController::class, 'update']);
  * |--------------------------------------------------------------------------
  */
 Route::post('/subscription/intent', [SubscriptionController::class, 'subscriptionIntention']);
+Route::post('/subscription/cancel', [SubscriptionController::class, 'cancelPremiumSubscription']);
