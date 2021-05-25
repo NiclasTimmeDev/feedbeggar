@@ -6,7 +6,7 @@ The banner is included in the default layout.
 
 <template>
   <v-banner
-      v-if="isPremium"
+      v-if="!isPremium && show"
       v-model="show"
       elevation="5"
       icon="mdi-crown"
