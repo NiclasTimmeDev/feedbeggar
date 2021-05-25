@@ -9,6 +9,7 @@ use App\Models\FeedbackPost;
 use App\Models\Project;
 use App\Models\User;
 use App\Notifications\FeedbackSubmitted;
+use App\Notifications\TooMuchFeedback;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -30,7 +31,7 @@ class FeedbackPostController extends Controller
             // Check current user.
             $user = Auth::user();
 
-            if (!$user) {
+            if (!$user instanceof User) {
                 return ExceptionHelper::customSingleError('Not authenticated', 403);
             }
 
@@ -41,8 +42,12 @@ class FeedbackPostController extends Controller
             }
 
             // Load and return feedback for the project.
-            $feedback = FeedbackPost::where('project_id', $project_id)->orderBy('created_at', 'DESC')->get();
+            $feedback = FeedbackPost::where('project_id', $project_id)->orderBy('created_at', 'ASC')->get();
 
+            // If the user is not premium, only show limited number of feedback.
+            if (!$user->is_premium) {
+                $feedback = $feedback->take(Project::$maxSubmissionsForNonPremium);
+            }
             return $feedback;
         } catch (Throwable $e) {
             return ExceptionHelper::customSingleError('Sorry, something went wrong. Please try again later.', 500);
@@ -286,8 +291,20 @@ class FeedbackPostController extends Controller
             ]);
             $new_feedback->save();
 
+            /*
+             * Update the count of the project. A non-premium user
+             * may not see more than 20 submissions in total.
+             */
+            $max_count = Project::$maxSubmissionsForNonPremium;
+
+            $new_project_feedback_count = $project->feedback_count + 1;
+
+            $project->update([
+                'feedback_count' => $new_project_feedback_count,
+            ]);
+
             // Notify owner of project about the new feedback.
-            $this->notifyUser($project, $new_feedback);
+            $this->notifyUser($project, $new_feedback, $max_count, $new_project_feedback_count);
 
             // Send positive response to client.
             return true;
@@ -332,7 +349,7 @@ class FeedbackPostController extends Controller
     /**
      * Notify the user when a new feedback was submitted.
      */
-    private function notifyUser(Project $project, FeedbackPost $feedback)
+    private function notifyUser(Project $project, FeedbackPost $feedback, int $maxFeedbackCount, int $feedbackCount)
     {
         $user = User::find($project->user_id);
 
@@ -342,11 +359,20 @@ class FeedbackPostController extends Controller
 
         $slug = '/feedback/' . $project->id . '/' . $feedback->id;
 
-        return $user->notify(new FeedbackSubmitted($slug));
+        /*
+         * Send different notifications depending on the number of
+         * feedback that has already been submitted and if the user
+         * is premium.
+         */
+        if ($feedbackCount > $maxFeedbackCount && !$user->is_premium) {
+            $user->notify(new TooMuchFeedback());
+        } else {
+            $user->notify(new FeedbackSubmitted($slug));
+        }
     }
 
     /**
-     * Toggle the archiviation status of a feedback.
+     * Toggle the archivation status of a feedback.
      *
      * If it is thus far not archived, it will be archived and vice versa.
      *

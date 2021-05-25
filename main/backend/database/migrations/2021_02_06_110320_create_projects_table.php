@@ -23,6 +23,9 @@ class CreateProjectsTable extends Migration
             $table->string('name');
             // If it's a premium subscription or not.
             $table->boolean('is_premium');
+            //Feedback count.
+            $table->integer('feedback_count')->default(0);
+            // Timestamps.
             $table->timestamps();
         });
     }

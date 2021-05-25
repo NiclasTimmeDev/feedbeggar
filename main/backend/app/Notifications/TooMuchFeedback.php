@@ -3,30 +3,27 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class FeedbackSubmitted extends Notification
+class TooMuchFeedback extends Notification
 {
     use Queueable;
-
-    public $feedback_slug;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($slug)
+    public function __construct()
     {
-        $this->slug = $slug;
+        //
     }
 
     /**
      * Get the notification's delivery channels.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
      * @return array
      */
     public function via($notifiable)
@@ -37,23 +34,22 @@ class FeedbackSubmitted extends Notification
     /**
      * Get the mail representation of the notification.
      *
-     * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
+     * @param mixed $notifiable
+     * @return MailMessage
      */
     public function toMail($notifiable)
     {
-        $action_url = env('FRONTEND_URL') . $this->feedback_slug;
-
         return (new MailMessage)
             ->line('A new feedback has been submitted!')
-            ->action('See feedback', $action_url)
-            ->line('Thank you for using our application!');
+            ->line('However, you currently cannot access it because you received more than 20 feedback submissions. Consider upgrading to premium so see all submissions!')
+            ->action('Upgrade now', env('FRONTEND_URL', 'https://app.feedbeggar.com') . '/subscriptions/plans')
+            ->line('Thank you for using Feedbeggar!');
     }
 
     /**
      * Get the array representation of the notification.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
      * @return array
      */
     public function toArray($notifiable)
