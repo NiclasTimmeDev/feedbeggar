@@ -37,6 +37,8 @@
             :items="items"
             :items-per-page="5"
             class="elevation-1"
+            :sort-by="['created_at']"
+            :sort-desc="true"
             @click:row="routeToSingle"
         >
           <template v-slot:item.type="{ item }">
