@@ -21,6 +21,8 @@ div.feedbeggar--anchor {
     color: $black;
     transition: all .3s ease-in-out;
 
+    right: 90%;
+
     @media (min-width: 576px) {
       right: 58%;
     }

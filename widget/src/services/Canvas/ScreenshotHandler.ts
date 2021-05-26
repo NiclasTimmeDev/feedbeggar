@@ -7,7 +7,6 @@ export class ScreenshotHandler {
    */
   static takeScreenshot = async (): Promise<string> => {
     const canvas = await html2canvas(document.body);
-    console.log(canvas.toDataURL('image/jpeg', 0.9));
     return canvas.toDataURL('image/jpeg', 0.9);
   };
 
@@ -18,18 +17,19 @@ export class ScreenshotHandler {
     // Create canvas element and append it to document body
     let canvas = document.createElement('canvas');
     canvas.classList.add('feedback-form--painter-canvas');
-    document.body.appendChild(canvas);
+    document.querySelector('body')!.appendChild(canvas)
 
     // Some hofixes.
-    document.body.style.margin = '0';
     canvas.style.position = 'fixed';
+    canvas.style.top = "0";
+    canvas.style.left = "0"
 
     // Get canvas 2D context and set it to correct size.
     var ctx = canvas.getContext('2d')!;
     resize();
 
     // Last known position.
-    var pos = { x: 0, y: 0 };
+    let pos = { x: 0, y: 0 };
 
     // new position from mouse event
     function setPosition(e: MouseEvent) {
@@ -44,7 +44,7 @@ export class ScreenshotHandler {
     }
 
     function draw(e: MouseEvent) {
-      // mouse left button must be pressed
+      // mouse left button must be pressed.
       if (e.buttons !== 1) return;
 
       ctx.beginPath(); // begin
@@ -58,6 +58,7 @@ export class ScreenshotHandler {
       ctx.lineTo(pos.x, pos.y); // to
 
       ctx.stroke(); // draw it!
+      ctx.closePath();
     }
     // Add all the necessary event listenders.
     window.addEventListener('resize', resize);

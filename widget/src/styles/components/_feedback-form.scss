@@ -11,6 +11,7 @@
   z-index: 1000;
   border-radius: 4px 0 0 0;
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  width: 92%;
 
   @media (min-width: 576px) {
     width: 60%;
@@ -37,14 +38,18 @@
     width: 100%;
     display: flex;
     justify-content: flex-start;
+    align-items: center;
 
     .feedback-form--checkbox {
       width: unset;
+      margin-right: 5px;
     }
   }
 }
 
 .feedbeggar--feedback-form-hidden {
+    right: -92%;
+
   @media (min-width: 576px) {
     right: -60%;
   }

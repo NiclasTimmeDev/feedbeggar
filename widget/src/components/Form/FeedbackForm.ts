@@ -254,7 +254,6 @@ export class FeedbackForm {
       '.feedback-form--checkbox',
     )!;
 
-    // TODO: Check if they are valid.
     // Check if option was selected.
     if (!option.value) {
       this.formErrors.option = 'Please select an option.';
@@ -315,10 +314,16 @@ export class FeedbackForm {
       path: window.location.pathname,
     };
 
+    const btn: any = document.querySelector('.feedback-form--btn')!;
     try {
+      btn.value = 'Sending feedback...';
       const res = await axios.post('api/feedback', data);
+
+      if(res.status === 200) {
+        btn.value = 'Feedback submitted successfully!'
+      }
     } catch (error) {
-      console.log(error);
+      btn.value = 'Sorry, there was an error!'
     }
     return true;
   };
@@ -372,9 +377,16 @@ export class FeedbackForm {
     }
   };
 
+  /**
+   * Attach the paint functionality if the checkbox is checked.
+   *
+   * @param element
+   *   The element the functionality should be attached to.
+   */
   public attachPaintFunctionality = (element: HTMLInputElement) => {
     element.addEventListener('change', function () {
       if (this.checked) {
+
         ScreenshotHandler.painOnScreen();
       } else {
         ScreenshotHandler.removePaintOnScreenElement();
