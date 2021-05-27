@@ -18,7 +18,7 @@
           <!--==============================-->
           <!-- Headline.-->
           <!--==============================-->
-          <h1>Your projects</h1>
+          <h1 class="text-h2 mb-5" >Your projects</h1>
 
           <!--==============================-->
           <!-- Dialog for adding a new project.-->

@@ -3,7 +3,7 @@
     <!--Headline-->
     <v-row>
       <v-col cols="12">
-        <h1>Documentation!</h1>
+        <h1 class="text-h2 mb-5" >Documentation!</h1>
       </v-col>
     </v-row>
 

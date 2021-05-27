@@ -11,7 +11,7 @@
   <p v-else-if="$fetchState.error">{ error || "Sorry, something went wrong. Please try again later." }</p>
 
   <div v-else>
-    <h1>You got some Feedback!</h1>
+    <h1 class="text-h2 mb-5" >You got some Feedback!</h1>
 
     <!--Chip-->
     <v-row>

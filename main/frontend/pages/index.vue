@@ -20,7 +20,7 @@
     <!-- Headline-->
     <v-row>
       <v-col class="d-flex justify-start align-center" cols="12">
-        <h1>Inbox</h1>
+        <h1 class="text-h2" >Inbox</h1>
         <v-icon
             class="ml-2 primary--text"
             @click="csvDownload"
@@ -36,7 +36,6 @@
             :headers="headers"
             :items="items"
             :items-per-page="5"
-            class="elevation-1"
             :sort-by="['created_at']"
             :sort-desc="true"
             @click:row="routeToSingle"

@@ -5,7 +5,7 @@
         <!-- Error message -->
         <v-alert v-if="error" type="error">{{ error }}</v-alert>
 
-        <v-card-title class="headline">
+        <v-card-title class="headline text-h2">
           Forgot you password?
         </v-card-title>
 

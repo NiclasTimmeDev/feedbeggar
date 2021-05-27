@@ -20,6 +20,19 @@ services:
       - mysql
       - redis
 
+  # Marketing website.
+  marketing:
+    image: node:alpine
+    container_name: marketing
+    working_dir: "/var/www/html"
+    volumes:
+      - "./marketing:/var/www/html/"
+    ports:
+      - "3002:3000"
+    environment:
+      HOST: 0.0.0.0
+    command: "npm run dev"
+
   # frontend:
   #   image: node:alpine
   #   working_dir: /var/www/html

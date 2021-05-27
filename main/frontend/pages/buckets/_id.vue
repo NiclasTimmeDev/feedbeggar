@@ -15,7 +15,7 @@
     <v-row>
       <v-col class="d-flex justify-start align-center" cols="12">
 
-        <h1 class="mr-5">{{ bucket.data.name }}</h1>
+        <h1 class="text-h2 mr-5">{{ bucket.data.name }}</h1>
 
         <!--Add new bucket.-->
         <template>

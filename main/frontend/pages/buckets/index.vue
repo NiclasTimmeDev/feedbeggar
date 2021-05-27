@@ -12,7 +12,7 @@
   <div v-else>
     <v-row>
       <v-col cols="12">
-        <h1>Your Buckets</h1>
+        <h1 class="text-h2" >Your Buckets</h1>
       </v-col>
     </v-row>
 
